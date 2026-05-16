@@ -1,5 +1,5 @@
 # Nombre del workflow que aparecerá en GitHub Actions
-name: CI - Clinica API
+name: CI Clinica API - Ejercicios Completados
 
 # Eventos que activan el pipeline
 on:
