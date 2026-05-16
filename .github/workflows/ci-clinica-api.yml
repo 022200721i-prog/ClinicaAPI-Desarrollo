@@ -1,0 +1,42 @@
+# Nombre del workflow que aparecerá en GitHub Actions
+name: CI - Clinica API
+
+# Eventos que activan el pipeline
+on:
+  # Se ejecuta cuando hay un push a las ramas main o develop
+  push:
+    branches: [ main, develop ]
+  # También se ejecuta cuando se crea un pull request hacia main
+  pull_request:
+    branches: [ main ]
+
+# Definición de los trabajos (jobs)
+jobs:
+  # Trabajo de construcción y prueba
+  build-and-test:
+    # El runner (máquina virtual) usará Ubuntu
+    runs-on: ubuntu-latest
+
+    # Pasos secuenciales del trabajo
+    steps:
+      # 1. Descargar el código fuente del repositorio
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # 2. Configurar .NET SDK versión 8.0.x
+      - name: Instalar .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # 3. Restaurar los paquetes NuGet (dependencias)
+      - name: Restaurar dependencias
+        run: dotnet restore
+
+      # 4. Compilar la solución completa
+      - name: Compilar aplicación
+        run: dotnet build --no-restore --configuration Release
+
+      # 5. Ejecutar las pruebas unitarias (si existen)
+      - name: Ejecutar pruebas
+        run: dotnet test --no-build --verbosity normal
